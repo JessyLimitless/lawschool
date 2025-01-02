@@ -1,44 +1,45 @@
-import os
 from flask import Flask, request, jsonify, render_template
 import openai
 
+# Initialize the Flask application
 app = Flask(__name__)
 
-# Securely set OpenAI API key
-openai.api_key = 'sk-'
+# Set OpenAI API key (replace 'your-api-key' with your actual key)
+openai.api_key = "sk-"
 
 def generate_case_question(subject):
     """
-    Generate a case question dynamically using OpenAI API.
+    Generate a bar exam-style case question for the selected subject.
     """
     try:
         prompt = f"Generate a challenging bar exam-style case question for the subject: {subject}."
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are an expert in US bar exam preparation."},
+                {"role": "system", "content": "You are an expert in bar exam preparation."},
                 {"role": "user", "content": prompt}
             ]
         )
         return response['choices'][0]['message']['content'].strip()
     except Exception as e:
-        raise ValueError("Error generating case question")
+        raise ValueError(f"Error generating case question: {e}")
 
 def evaluate_answer(user_answer, case_question):
     """
-    Evaluate the user's answer and generate a score out of 10, feedback, and a correct answer.
+    Evaluate the user's answer to the case question and return detailed feedback.
     """
     try:
         prompt = f"""
-        Evaluate the following user answer against the case question.
+        Evaluate the following user answer against the case question:
         Case Question: {case_question}
         User Answer: {user_answer}
         Provide:
-        - A score from 1 to 10.
-        - A detailed explanation for why this score was given.
-        - Constructive feedback pointing out shortcomings (if any).
-        - Praise for what the user did well.
-        - An ideal correct answer for comparison.
+        - A score out of 10
+        - A detailed explanation for the score
+        - Constructive feedback on shortcomings
+        - Praise for positive aspects of the answer
+        - The correct answer for comparison
+
         Format your response as:
         Score: [1-10]
         Explanation: [...]
@@ -49,13 +50,13 @@ def evaluate_answer(user_answer, case_question):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are an expert in evaluating legal case answers."},
+                {"role": "system", "content": "You are an expert in legal exam evaluation."},
                 {"role": "user", "content": prompt}
             ]
         )
         return response['choices'][0]['message']['content'].strip()
     except Exception as e:
-        raise ValueError("Error evaluating the answer")
+        raise ValueError(f"Error evaluating answer: {e}")
 
 @app.route('/generate-case', methods=['POST'])
 def generate_case():
@@ -76,12 +77,11 @@ def generate_case():
 @app.route('/evaluate-answer', methods=['POST'])
 def evaluate_answer_endpoint():
     """
-    Endpoint to evaluate the user's answer and return a score and feedback.
+    Endpoint to evaluate the user's answer to the case question.
     """
     data = request.json
     user_answer = data.get('user_answer')
     case_question = data.get('case_question')
-
     if not user_answer or not case_question:
         return jsonify({'error': 'Missing user answer or case question'}), 400
 
@@ -94,9 +94,10 @@ def evaluate_answer_endpoint():
 @app.route('/')
 def index():
     """
-    Serve the combined HTML file.
+    Render the main page of the application.
     """
     return render_template('index.html')
 
+# Run the app
 if __name__ == '__main__':
     app.run(debug=True)
