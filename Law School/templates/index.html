@@ -3,60 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bar Exam Prep</title>
+    <title>New York Bar Exam Test</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Base styles */
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             background: #f9f9f9;
             color: #333;
         }
+
+        /* Smooth page transitions */
+        .page {
+            display: none;
+            opacity: 0;
+            transform: translateX(-100%);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Centered layout */
         .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
-        }
-        .page {
-            display: none;
             text-align: center;
-            padding: 20px;
         }
-        .page.active {
-            display: block;
+
+        /* Adjust the h1 style for the evaluation page */
+    h1 {
+    font-size: 2.8rem;
+    margin-top: 40px; /* Increase the top margin */
+    margin-bottom: 20px;
+    padding-top: 20px; /* Add extra padding to avoid overlap */
+    color: #222;
+    text-align: center; /* Ensure alignment consistency */
+    }
+
+
+        p {
+            font-size: 1.3rem;
+            margin: 15px 0;
+            color: #555;
+            line-height: 1.6;
         }
+
+        textarea {
+            width: 100%;
+            height: 160px;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
         button {
             background: #007bff;
             color: #fff;
             border: none;
-            padding: 10px 20px;
+            padding: 15px 25px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
-            margin: 10px;
+            font-size: 1.0rem;
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.3s ease, transform 0.3s ease;
         }
+
         button:hover {
             background: #0056b3;
+            transform: scale(1.05);
         }
-        textarea {
+
+        button i {
+            font-size: 1.5rem;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
             width: 100%;
-            height: 100px;
-            margin-top: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+
+            
         }
-        #star-rating {
-            font-size: 28px;
-            color: gold;
-        }
+
+        /* Feedback container */
         .score-container {
             background: #fff;
-            padding: 20px;
+            padding: 25px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin: 20px 0;
+            margin: 50px 0;
+        }
+
+        /* Error message */
+        #error-message {
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Star rating */
+        #star-rating i {
+            font-size: 1.5rem;
+            color: gold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
         }
     </style>
 </head>
@@ -64,148 +149,157 @@
     <div class="container">
         <!-- Page 1: Subject Selection -->
         <div id="page-1" class="page active">
-            <h1>Select an Elective Subject</h1>
-            <button onclick="selectSubject('Constitutional Law')">Constitutional Law</button>
-            <button onclick="selectSubject('Criminal Law')">Criminal Law</button>
-            <button onclick="selectSubject('Civil Law')">Civil Law</button>
-            <button onclick="selectSubject('Property Law')">Property Law</button>
-            <button onclick="selectSubject('Evidence')">Evidence</button>
+            <header>
+                <h1><i class="fas fa-book"></i> New York Bar Exam Test</h1>
+                <p>Select a subject and prepare for success!</p>
+            </header>
+            <div class="button-grid">
+                <button onclick="selectSubject('Constitutional Law')" aria-label="Select Constitutional Law">
+                    <i class="fas fa-gavel"></i> Constitutional Law
+                </button>
+                <button onclick="selectSubject('Criminal Law')" aria-label="Select Criminal Law">
+                    <i class="fas fa-balance-scale"></i> Criminal Law
+                </button>
+                <button onclick="selectSubject('Civil Law')" aria-label="Select Civil Law">
+                    <i class="fas fa-file-contract"></i> Civil Law
+                </button>
+                <button onclick="selectSubject('Property Law')" aria-label="Select Property Law">
+                    <i class="fas fa-home"></i> Property Law
+                </button>
+                <button onclick="selectSubject('Evidence')" aria-label="Select Evidence">
+                    <i class="fas fa-folder"></i> Evidence
+                </button>
+            </div>
+            <p id="error-message"></p>
         </div>
 
         <!-- Page 2: Case Question -->
         <div id="page-2" class="page">
-            <h1 id="subject-title"></h1>
-            <p id="case-question">Loading case question...</p>
+            <h1 id="subject-title"><i class="fas fa-gavel"></i> Constitutional Law</h1>
+            <p id="case-question">Imagine you're defending a constitutional case...</p>
             <textarea id="answer" placeholder="Type your answer here..."></textarea>
-            <button onclick="submitAnswer()">Submit Answer</button>
+            <div>
+                <button onclick="submitAnswer()"><i class="fas fa-paper-plane"></i> Submit Answer</button>
+                <button onclick="navigateTo('page-1')"><i class="fas fa-arrow-left"></i> Back</button>
+            </div>
         </div>
 
-        <!-- Page 3: Answer Feedback -->
+        <!-- Page 3: Feedback -->
         <div id="page-3" class="page">
-            <h1 id="feedback-title"></h1>
+            <h1>Your Feedback</h1>
             <div class="score-container">
                 <p><strong>Your Answer:</strong></p>
-                <p id="user-answer"></p>
+                <p id="user-answer">Your answer will be displayed here.</p>
                 <p><strong>Feedback:</strong></p>
-                <p id="feedback"></p>
+                <p id="feedback">Detailed feedback will appear here.</p>
             </div>
-            <button onclick="showEvaluation()">See Evaluation</button>
+            <div>
+                <button onclick="showEvaluation()"><i class="fas fa-star"></i> View Evaluation</button>
+                <button onclick="navigateTo('page-1')"><i class="fas fa-arrow-left"></i> Back</button>
+            </div>
         </div>
 
         <!-- Page 4: Evaluation Results -->
         <div id="page-4" class="page">
             <h1>Evaluation Results</h1>
             <div class="score-container">
-                <p><strong>Your Score:</strong> <span id="numeric-score"></span>/10</p>
+                <p><strong>Your Score:</strong> <span id="numeric-score">0</span>/10</p>
                 <div id="star-rating"></div>
                 <p><strong>Explanation:</strong></p>
-                <p id="evaluation-explanation"></p>
+                <p id="evaluation-explanation">Detailed explanation will appear here.</p>
                 <p><strong>Shortcomings:</strong></p>
-                <p id="evaluation-shortcomings"></p>
+                <p id="evaluation-shortcomings">Shortcomings will be listed here.</p>
                 <p><strong>Praise:</strong></p>
-                <p id="evaluation-praise"></p>
+                <p id="evaluation-praise">Praise for the answer will appear here.</p>
                 <p><strong>Correct Answer:</strong></p>
-                <p id="correct-answer"></p>
+                <p id="correct-answer">The ideal correct answer will appear here.</p>
             </div>
-            <button onclick="restart()">Back to Subject Selection</button>
+            <button onclick="restart()"><i class="fas fa-undo"></i> Back to Subject Selection</button>
         </div>
     </div>
+    <footer>
+        <p>&copy; 2025 New York Bar Exam Test. All rights reserved.</p>
+    </footer>
     <script>
         let selectedSubject = '';
 
         function selectSubject(subject) {
+            document.getElementById('error-message').style.display = 'none';
             selectedSubject = subject;
             document.getElementById('subject-title').textContent = subject;
-
             fetch('/generate-case', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ subject: subject })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.question) {
-                    document.getElementById('case-question').textContent = data.question;
-                    navigateTo('page-2');
-                } else {
-                    alert('Error generating case question.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to generate case question.');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.question) {
+                        document.getElementById('case-question').textContent = data.question;
+                        navigateTo('page-2');
+                    } else {
+                        document.getElementById('error-message').textContent = 'Error generating case question.';
+                        document.getElementById('error-message').style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('error-message').textContent = 'Failed to generate case question.';
+                    document.getElementById('error-message').style.display = 'block';
+                });
         }
 
         function submitAnswer() {
-            const userAnswer = document.getElementById('answer').value;
-            const caseQuestion = document.getElementById('case-question').textContent;
-
+            const userAnswer = document.getElementById('answer').value.trim();
+            if (!userAnswer) {
+                alert('Please enter your answer before submitting.');
+                return;
+            }
             document.getElementById('user-answer').textContent = userAnswer;
-
-            fetch('/evaluate-answer', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_answer: userAnswer, case_question: caseQuestion })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.evaluation) {
-                    const feedback = data.evaluation.match(/Feedback:\s*([\s\S]*?)Praise:/)?.[1]?.trim();
-                    document.getElementById('feedback').textContent = feedback;
-
-                    navigateTo('page-3');
-                } else {
-                    alert('Error evaluating answer.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to evaluate answer.');
-            });
+            navigateTo('page-3');
         }
 
         function showEvaluation() {
             const caseQuestion = document.getElementById('case-question').textContent;
             const userAnswer = document.getElementById('answer').value;
-
             fetch('/evaluate-answer', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user_answer: userAnswer, case_question: caseQuestion })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.evaluation) {
-                    const evaluation = data.evaluation;
-                    const score = parseInt(evaluation.match(/Score:\s*(\d+)/)?.[1] || 0, 10);
-                    const explanation = evaluation.match(/Explanation:\s*([\s\S]*?)Shortcomings:/)?.[1]?.trim();
-                    const shortcomings = evaluation.match(/Shortcomings:\s*([\s\S]*?)Praise:/)?.[1]?.trim();
-                    const praise = evaluation.match(/Praise:\s*([\s\S]*?)Correct Answer:/)?.[1]?.trim();
-                    const correctAnswer = evaluation.match(/Correct Answer:\s*([\s\S]*)/)?.[1]?.trim();
+                .then(response => response.json())
+                .then(data => {
+                    if (data.evaluation) {
+                        const evaluation = data.evaluation;
+                        const score = parseInt(evaluation.match(/Score:\s*(\d+)/)?.[1] || 0, 10);
+                        const explanation = evaluation.match(/Explanation:\s*([\s\S]*?)Shortcomings:/)?.[1]?.trim();
+                        const shortcomings = evaluation.match(/Shortcomings:\s*([\s\S]*?)Praise:/)?.[1]?.trim();
+                        const praise = evaluation.match(/Praise:\s*([\s\S]*?)Correct Answer:/)?.[1]?.trim();
+                        const correctAnswer = evaluation.match(/Correct Answer:\s*([\s\S]*)/)?.[1]?.trim();
 
-                    document.getElementById('numeric-score').textContent = score;
-                    document.getElementById('evaluation-explanation').textContent = explanation;
-                    document.getElementById('evaluation-shortcomings').textContent = shortcomings || "None";
-                    document.getElementById('evaluation-praise').textContent = praise;
-                    document.getElementById('correct-answer').textContent = correctAnswer;
+                        document.getElementById('numeric-score').textContent = score;
+                        document.getElementById('evaluation-explanation').textContent = explanation || 'No explanation provided.';
+                        document.getElementById('evaluation-shortcomings').textContent = shortcomings || 'None.';
+                        document.getElementById('evaluation-praise').textContent = praise || 'Well done!';
+                        document.getElementById('correct-answer').textContent = correctAnswer || 'Not provided.';
 
-                    renderStars(score);
-                    navigateTo('page-4');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                        renderStars(score);
+                        navigateTo('page-4');
+                    } else {
+                        alert('Failed to fetch evaluation data.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while fetching the evaluation.');
+                });
         }
 
         function renderStars(score) {
             const starContainer = document.getElementById('star-rating');
-            starContainer.innerHTML = ''; // Clear existing stars
-
+            starContainer.innerHTML = '';
             const fullStars = Math.floor(score / 2);
             const halfStar = score % 2 === 1;
-
             for (let i = 0; i < fullStars; i++) {
                 starContainer.innerHTML += '<i class="fa fa-star"></i>';
             }
@@ -225,8 +319,13 @@
 
         function navigateTo(pageId) {
             const pages = document.querySelectorAll('.page');
-            pages.forEach(page => page.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
+            pages.forEach(page => {
+                page.classList.remove('active');
+                if (page.id === pageId) {
+                    page.classList.add('active');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
